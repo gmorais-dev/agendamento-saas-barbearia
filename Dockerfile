@@ -1,23 +1,15 @@
-# Etapa base
 FROM node:22.14
-
-# Define o diretório de trabalho dentro do container
 WORKDIR /usr/src/app
 
-# Copia os arquivos do projeto
+# usa package.json que está na raiz do repositório
 COPY package*.json ./
-
-# Instala as dependências
 RUN npm install
 
-# Copia o restante do código
-COPY . .
+# copia o prisma e o src que estão dentro de barbearia-api/
+COPY barbearia-api/prisma ./prisma
+COPY barbearia-api/src ./src
+COPY .env ./
 
-# Gera o cliente Prisma
-RUN npx prisma generate
-
-# Expõe a porta da aplicação
 EXPOSE 3000
-
-# Comando padrão (sobrescrito pelo docker-compose)
-CMD ["npm", "run", "dev"]
+# executa o entrypoint diretamente (package.json atual não tem "dev")
+CMD ["node", "src/index.js"]
