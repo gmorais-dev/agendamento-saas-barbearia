@@ -1,0 +1,30 @@
+services:
+  db:
+    image: postgres:16
+    container_name: postgres_barbearia
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build:
+      context: ./barbearia-api
+    container_name: barbearia_app
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "${PORT}:3000"
+    env_file: .env
+    command: node src/index.js  
+    volumes:
+      - ./barbearia-api:/usr/src/app
+
+volumes:
+  postgres_data:
