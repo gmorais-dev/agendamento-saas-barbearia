@@ -22,7 +22,7 @@ services:
     ports:
       - "${PORT}:3000"
     env_file: .env
-    command: node src/index.js  
+    command: npx nodemon src/index.js   
     volumes:
       - ./barbearia-api:/usr/src/app
 
